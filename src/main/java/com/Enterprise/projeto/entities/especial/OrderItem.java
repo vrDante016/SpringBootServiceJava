@@ -1,0 +1,98 @@
+package com.Enterprise.projeto.entities.especial;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import com.Enterprise.projeto.entities.Order;
+import com.Enterprise.projeto.entities.Product;
+import com.Enterprise.projeto.entitiesPk.OrdemItemPk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tb_order_item")
+public class OrderItem implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
+	@EmbeddedId
+	private OrdemItemPk id = new OrdemItemPk();
+	
+	private Integer quantity;
+	private Double price;
+	
+	public OrderItem() {
+	
+	}
+
+	public OrderItem(Order order, Product product , Integer quantity, Double price) {
+		super();
+		id.setOrder(order);
+		id.setProduct(product);
+		this.quantity = quantity;
+		this.price = price;
+	}
+	@JsonIgnore
+	public Order getOrder() {
+		return id.getOrder();
+	}
+	public void setOrder(Order order) {
+		id.setOrder(order);
+	}
+	public Product getProdutos() {
+		return id.getProduct();
+	}
+	public void setProdutos(Product product) {
+		id.setProduct(product);
+	}
+	
+	public OrdemItemPk getId() {
+		return id;
+	}
+
+	public void setId(OrdemItemPk id) {
+		this.id = id;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double subTotal() {
+		return this.price * this.quantity;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrderItem other = (OrderItem) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
+}
